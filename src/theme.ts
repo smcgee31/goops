@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { red, blue, green, grey, indigo, orange, yellow, purple } from '@mui/material/colors';
+import { red } from '@mui/material/colors';
 
 // Create a theme instance.
 // material-ui theme with black background
