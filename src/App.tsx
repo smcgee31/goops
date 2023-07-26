@@ -1,43 +1,104 @@
-import { Suspense } from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Typography } from '@mui/material';
-import './App.css';
-import Canvas from './components/canvas';
+import { useEffect, useState } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import DataContext from './data_context';
+import getData from './utils/data';
+import './index.css';
+
+import AppInner from './AppInner';
+import BadMerge from './BadMerge';
+import BadRebase from './BadRebase';
+import Bfg from './Bfg';
+import BranchOverlayMerge from './BranchOverlayMerge';
+import ChangeSingleDeepMerge from './ChangeSingleDeepMerge';
+import ChangeSingleDeepSimple from './ChangeSingleDeepSimple';
+import ChoiceCard from './components/choice_card';
+import Copyright from './Copyright';
+import Credits from './Credits';
+import DiscardAllUnpushed from './DiscardAllUnpushed';
+import Disclaimer from './Disclaimer';
+import ErrorPage from './error-page';
+import FilterBranch from './FilterBranch';
+import LostNFound from './LostNFound';
+import MoveCommit from './MoveCommit';
+import PushedFixit from './PushedFixit';
+import PushedNewMerge from './PushedNewMerge';
+import PushedNewSimple from './PushedNewSimple';
+import PushedOld from './PushedOld';
+import PushedRestoreFile from './PushedRestoreFile';
+import RemoveDeep from './RemoveDeep';
+import RemoveLast from './RemoveLast';
+import ReplaceAllUnpushed from './ReplaceAllUnpushed';
+import ReworkLast from './ReworkLast';
+import UncommittedCommit from './UncommittedCommit';
+import UncommittedEverything from './UncommittedEverything';
+import UncommittedSomethings from './UncommittedSomethings';
+import UndoTip from './UndoTip';
+import UpdateLast from './UpdateLast';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <AppInner />,
+    errorElement: <ErrorPage />,
+  },
+  { path: '/start', element: <ChoiceCard cardName="start" /> },
+  { path: '/committedp', element: <ChoiceCard cardName="committedp" /> },
+  { path: '/committed', element: <ChoiceCard cardName="committed" /> },
+  { path: '/uncommitted', element: <ChoiceCard cardName="uncommitted" /> },
+  { path: '/committed_really', element: <ChoiceCard cardName="committed_really" /> },
+  { path: '/pushed', element: <ChoiceCard cardName="pushed" /> },
+  { path: '/unpushed', element: <ChoiceCard cardName="unpushed" /> },
+  { path: '/fix_unpushed', element: <ChoiceCard cardName="fix_unpushed" /> },
+  { path: '/change_last', element: <ChoiceCard cardName="change_last" /> },
+  { path: '/change_deep', element: <ChoiceCard cardName="change_deep" /> },
+  { path: '/modify_deep', element: <ChoiceCard cardName="modify_deep" /> },
+  { path: '/bulk_rewrite_history', element: <ChoiceCard cardName="bulk_rewrite_history" /> },
+  { path: '/change_single_deep', element: <ChoiceCard cardName="change_single_deep" /> },
+
+  { path: '/badmerge', element: <BadMerge /> },
+  { path: '/badrebase', element: <BadRebase /> },
+  { path: '/bfg', element: <Bfg /> },
+  { path: '/branch_overlay_merge', element: <BranchOverlayMerge /> },
+  { path: '/change_single_deep_merge', element: <ChangeSingleDeepMerge /> },
+  { path: '/change_single_deep_simple', element: <ChangeSingleDeepSimple /> },
+  { path: '/copyright', element: <Copyright /> },
+  { path: '/credits', element: <Credits /> },
+  { path: '/discard_all_unpushed', element: <DiscardAllUnpushed /> },
+  { path: '/disclaimer', element: <Disclaimer /> },
+  { path: '/filterbranch', element: <FilterBranch /> },
+  { path: '/lostnfound', element: <LostNFound /> },
+  { path: '/move_commit', element: <MoveCommit /> },
+  { path: '/pushed_fixit', element: <PushedFixit /> },
+  { path: '/pushed_new_merge', element: <PushedNewMerge /> },
+  { path: '/pushed_new_simple', element: <PushedNewSimple /> },
+  { path: '/pushed_old', element: <PushedOld /> },
+  { path: '/pushed_restore_file', element: <PushedRestoreFile /> },
+  { path: '/remove_deep', element: <RemoveDeep /> },
+  { path: '/remove_last', element: <RemoveLast /> },
+  { path: '/replace_all_unpushed', element: <ReplaceAllUnpushed /> },
+  { path: '/rework_last', element: <ReworkLast /> },
+  { path: '/uncommitted_commit', element: <UncommittedCommit /> },
+  { path: '/uncommitted_everything', element: <UncommittedEverything /> },
+  { path: '/uncommitted_somethings', element: <UncommittedSomethings /> },
+  { path: '/undo_tip', element: <UndoTip /> },
+  { path: '/update_last', element: <UpdateLast /> },
+]);
 
 const App = () => {
-  // this might be where you load data from your gist
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const results = await getData();
+      setData(results);
+    };
+    fetchData().catch((e) => console.error(e));
+  }, []);
+
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Canvas>
-        <Typography sx={{ fontSize: 'h1.fontSize' }} className="pb-4">
-          Goops!
-        </Typography>
-        <Typography mt={-3} mb={8}>
-          (git... oops!)
-        </Typography>
-        <Typography className="text-justify pb-4">
-          Let's embark on an adventure to fix what you didn't mean to do. Before you get started you
-          should really consider making sure you have a{' '}
-          <a href="https://sethrobertson.github.io/GitBestPractices/#backups" target="_blank">
-            backup
-          </a>{' '}
-          of your work. If later you find yourself regretting not doing this we promise to only
-          laugh at you a little bit. 😜
-        </Typography>
-        <Typography className="pb-4">
-          In order to know how to help you get where you are going, I need to know where you have
-          been.
-        </Typography>
-        <Typography fontSize={24}>
-          <Link to="/start">Let's Go!</Link>
-        </Typography>
-        <Container sx={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '64px' }}>
-          <Link to="/credits">Credits</Link>
-          <Link to="/copyright">Copyright</Link>
-          <Link to="/disclaimer">Disclaimer</Link>
-        </Container>
-      </Canvas>
-    </Suspense>
+    <DataContext.Provider value={data}>
+      <RouterProvider router={router} />
+    </DataContext.Provider>
   );
 };
 
