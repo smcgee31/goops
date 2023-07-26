@@ -12,3 +12,5 @@ type LinkType = {
   path: string;
   text: string;
 };
+
+export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue>;

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import DataContext from './data_context';
 import getData from './utils/data';
+import { JSONValue } from './types';
 import './index.css';
 
 import AppInner from './AppInner';
@@ -85,7 +86,7 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState<JSONValue>({});
 
   useEffect(() => {
     const fetchData = async () => {
