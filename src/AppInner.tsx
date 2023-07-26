@@ -14,7 +14,7 @@ const AppInner = () => {
         <Typography mt={-3} mb={4}>
           (git... oops!)
         </Typography>
-        <Typography className="text-justify pb-8">
+        <Typography className="text-justify pb-8 px-4">
           Let's embark on an adventure to fix what you didn't mean to do. Before you get started you
           should really consider making sure you have a{' '}
           <a href="https://sethrobertson.github.io/GitBestPractices/#backups" target="_blank">

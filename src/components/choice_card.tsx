@@ -15,18 +15,22 @@ const ChoiceCard = ({ cardName }: Props) => {
     <Suspense fallback={<div>Loading...</div>}>
       <Canvas>
         <Title>{title}</Title>
-        <Typography className="text-justify">{parse(description)}</Typography>
-        <>
-          {links.map((link) => (
-            <div key={link.path}>
-              <List>
-                <ListItem>
-                  <_Link to={`${link.path}`}>{link.text}</_Link>
-                </ListItem>
-              </List>
-            </div>
-          ))}
-        </>
+        <List>
+          <ListItem>
+            <Typography className="text-justify">{parse(description)}</Typography>
+          </ListItem>
+          <>
+            {links.map((link) => (
+              <div key={link.path}>
+                <List>
+                  <ListItem>
+                    <_Link to={`${link.path}`}>{link.text}</_Link>
+                  </ListItem>
+                </List>
+              </div>
+            ))}
+          </>
+        </List>
       </Canvas>
     </Suspense>
   );
