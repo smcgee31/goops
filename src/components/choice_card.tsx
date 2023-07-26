@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as _Link } from 'react-router-dom';
 import { List, ListItem, Typography } from '@mui/material';
 import parse from 'html-react-parser';
 import { CardData, CardName as Props } from './../types';
@@ -15,15 +15,17 @@ const ChoiceCard = ({ cardName }: Props) => {
       <Canvas>
         <Title>{title}</Title>
         <Typography className="text-justify">{parse(description)}</Typography>
-        {links.map((link) => (
-          <>
-            <List>
-              <ListItem>
-                <Link to={`${link.path}`}>{link.text}</Link>
-              </ListItem>
-            </List>
-          </>
-        ))}
+        <>
+          {links.map((link) => (
+            <div key={link.path}>
+              <List>
+                <ListItem>
+                  <_Link to={`${link.path}`}>{link.text}</_Link>
+                </ListItem>
+              </List>
+            </div>
+          ))}
+        </>
       </Canvas>
     </Suspense>
   );

@@ -5,5 +5,10 @@ export interface CardName {
 export interface CardData {
   title: string;
   description: string;
-  links: { path: string; text: string }[];
+  links: LinkType[];
 }
+
+type LinkType = {
+  path: string;
+  text: string;
+};
