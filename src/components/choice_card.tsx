@@ -9,7 +9,9 @@ import Title from './title';
 
 const ChoiceCard = ({ cardName }: Props) => {
   const data = useContext(DataContext);
-  const { title, description, links }: CardData = data[cardName as keyof typeof data];
+  const { title, description, links }: CardData = data
+    ? data[cardName as keyof typeof data]
+    : { title: '', description: '', links: [] };
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

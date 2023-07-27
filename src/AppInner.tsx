@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Typography } from '@mui/material';
-import './App.css';
 import Canvas from './components/canvas';
 
 const AppInner = () => {

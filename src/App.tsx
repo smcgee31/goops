@@ -1,5 +1,13 @@
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
+
+import { createTheme, CssBaseline, PaletteMode } from '@mui/material';
+import { amber, grey } from '@mui/material/colors';
+import IconButton from '@mui/material/IconButton';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+
 import DataContext from './data_context';
 import getData from './utils/data';
 import { JSONValue } from './types';
@@ -85,7 +93,12 @@ const router = createBrowserRouter([
   { path: '/update_last', element: <UpdateLast /> },
 ]);
 
+const ColorModeContext = createContext({ toggleColorMode: () => {} });
+
 const App = () => {
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
+
   const [data, setData] = useState<JSONValue>({});
 
   useEffect(() => {
@@ -97,10 +110,66 @@ const App = () => {
   }, []);
 
   return (
-    <DataContext.Provider value={data}>
-      <RouterProvider router={router} />
-    </DataContext.Provider>
+    <>
+      <div className="fixed top-4 right-4">
+        {theme.palette.mode} mode
+        <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </div>
+      <DataContext.Provider value={data}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </DataContext.Provider>
+    </>
   );
 };
 
-export default App;
+export default function ToggleColorMode() {
+  const [mode, setMode] = useState<PaletteMode>('light');
+  const colorMode = useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    []
+  );
+
+  const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+
+  return (
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </ColorModeContext.Provider>
+  );
+}
+
+function getDesignTokens(mode: PaletteMode) {
+  return {
+    palette: {
+      mode,
+      ...(mode === 'light'
+        ? {
+            // palette values for light mode
+            primary: amber,
+            divider: amber[200],
+            background: {
+              default: '#dbe9f5',
+              paper: '#fff',
+            },
+            text: {
+              primary: grey[900],
+              secondary: grey[800],
+            },
+          }
+        : {
+            // palette values for dark mode - currently using default MUI dark mode palette
+          }),
+    },
+  };
+}
